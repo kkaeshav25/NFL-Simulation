@@ -12,7 +12,7 @@ def scoring (team1,team2):
         print(f"Quarter {i+1}")
         drives_per_quarter = random.randint(4,5)
         for i in range(drives_per_quarter): #22 drives in a game
-            if random.randint(1,100) < 28:
+            if random.randint(1,100) < 41:
                 which_team = random.randint(43,57)
                 if ratings(team1)>ratings(team2):
                     ratings_threshold = 50+(0.5*(ratings(team1)-ratings(team2)))              
