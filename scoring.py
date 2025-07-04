@@ -2,177 +2,88 @@ from team_data import choose_player
 from ratings import ratings
 from utilities import generate_yards
 import random
-
-def scoring (team1,team2):
-    winner = ""
-    score1 = 0
-    score2 = 0
-    ratings_threshold = 0
-    for i in range(4):
-        print(f"Quarter {i+1}")
-        drives_per_quarter = random.randint(4,5)
-        for i in range(drives_per_quarter): #22 drives in a game
-            if random.randint(1,100) < 41:
-                which_team = random.randint(43,57)
-                if ratings(team1)>ratings(team2):
-                    ratings_threshold = 50+(0.5*(ratings(team1)-ratings(team2)))              
-                elif ratings(team1)<ratings(team2):
-                    ratings_threshold =50+(0.5*(ratings(team1)-ratings(team2)))
-                elif ratings(team1)==ratings(team2):
-                    ratings_threshold = 50
-                how_score = random.randint(0,100)            
-                if which_team < ratings_threshold: #Team1 scores
-                    if how_score<43: #Passing Touchdowns
-                        score1 +=6
-                        if random.random() < 0.8614: #PAT
-                            score1+=1
-                            print (team1 + " " + choose_player(team1, "WR") + " "+ str(generate_yards())+ " yard pass from " + choose_player(team1, "QB")  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                        else: 
-                            print (team1 + " " + choose_player(team1, "WR") + " "+ str(generate_yards())+ " yard pass from " + choose_player(team1, "QB") +". " + str(score1)+"-"+str(score2)) 
-                    elif 43< how_score<80: #Rushing Touchdown
-                        score1+=6
-                        if random.random() < 0.8614: #PAT 
-                            score1+=1
-                            print (team1 + " "+ choose_player(team1, "RB") + " "+ str(generate_yards())+" yard run. PAT GOOD "+ str(score1)+"-"+str(score2))
-                        else: 
-                            print (team1 + " "+ choose_player(team1, "RB") + " "+ str(generate_yards())+" yard run "+ str(score1)+"-"+str(score2))
-                    elif 80<how_score<97: #Field Goal
-                        score1+=3
-                        print (team1 + " FG GOOD "+ str(score1)+"-"+str(score2))
-                    elif how_score>97: #Defensive Touchdown
-                        defensive_possibilities = random.randint(0,100)
-                        if defensive_possibilities<67:#Interception
-                            score1+=6
-                            if random.random() < 0.8614: #PAT
-                                score1+=1
-                                print (team1 + " " + choose_player(team1, "Secondary") + " "+ str(generate_yards())+ " yard interception return"  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                            else:
-                                print (team1 + " " + choose_player(team1, "Secondary") + " "+ str(generate_yards())+ " yard interception return. " + str(score1)+"-"+str(score2))
-                        elif defensive_possibilities >67: #Fumble
-                            score1+=6
-                            if random.random() < 0.8614: #PAT
-                                score1+=1
-                                print (team1 + " " + choose_player(team1, "Rush") + " "+ str(generate_yards())+ " yard fumble return"  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                            else:
-                                print (team1 + " " + choose_player(team1, "Rush") + " "+ str(generate_yards())+ " yard fumble return. " + str(score1)+"-"+str(score2))                                  
-                elif which_team > ratings_threshold: #Team 2 Scores
-                    if how_score<43:
-                        score2+=6
-                        if random.random() < 0.8614:
-                            score2+=1
-                            print (team2 + " " + choose_player(team2, "WR") +  " "+ str(generate_yards())+" yard pass from " + choose_player(team2, "QB")  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                        else: 
-                            print (team2 + " " + choose_player(team2, "WR") + " "+ str(generate_yards())+" yard pass from " + choose_player(team2, "QB") +"." + str(score1)+"-"+str(score2))
-                    elif 43<how_score<80:
-                        score2+=6
-                        if random.random() < 0.8614:
-                            score2+=1
-                            print (team2 + " "+ choose_player(team2, "RB") + " "+ str(generate_yards())+ " yard run. PAT GOOD "+ str(score1)+"-"+str(score2))
-                        else: 
-                            print (team2 + " "+ choose_player(team2, "RB") + " "+ str(generate_yards())+ " yard run "+ str(score1)+"-"+str(score2))                 
-                    elif 80<how_score<97:
-                        score2+=3
-                        print (team2 + " FG GOOD "+ str(score1)+"-"+str(score2))
-                    elif how_score>97: #Defensive Touchdown
-                        defensive_possibilities = random.randint(0,100)
-                        if defensive_possibilities <67:#Interception
-                            score2+=6
-                            if random.random() < 0.8614: #PAT
-                                score2+=1
-                                print (team2 + " " + choose_player(team2, "Secondary") + " "+ str(generate_yards())+ " yard interception return"  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                            else:
-                                print (team1 + " " + choose_player(team2, "Secondary") + " "+ str(generate_yards())+ " yard interception return. " + str(score1)+"-"+str(score2))
-                        elif defensive_possibilities >67: #Fumble
-                            score2+=6
-                            if random.random() < 0.8614: #PAT
-                                score2+=1
-                                print (team2 + " " + choose_player(team2, "Rush") + " "+ str(generate_yards())+ " yard fumble return"  +". PAT GOOD " + str(score1)+"-"+str(score2))
-                            else:
-                                print (team2 + " " + choose_player(team2, "Rush") + " "+ str(generate_yards())+ " yard fumble return. " + str(score1)+"-"+str(score2))
-                    
-    if score1 == score2:
-        print("TIE GAME! Going to OVERTIME...")
-
-        ot_possessions = 0
-        while score1 == score2 and ot_possessions < 10:  # Prevent infinite loop
-            ot_possessions += 1
-            which_team = random.randint(43, 57)
-            ratings_threshold = 50 + 0.5 * (ratings(team1) - ratings(team2))
-            how_score = random.randint(0, 100)
-
-            if which_team < ratings_threshold:  # team1 scores
-                if how_score < 43:  # Passing TD
-                    score1 += 6
-                    if random.random() < 0.8614:
-                        score1 += 1
-                        print(team1 + " " + choose_player(team1, "WR") + " " + str(generate_yards()) + " yard pass from " + choose_player(team1, "QB") + ". PAT GOOD " + str(score1) + "-" + str(score2))
-                    else:
-                        print(team1 + " " + choose_player(team1, "WR") + " " + str(generate_yards()) + " yard pass from " + choose_player(team1, "QB") + ". " + str(score1) + "-" + str(score2))
-                elif 43 < how_score < 80:  # Rushing TD
-                    score1 += 6
-                    if random.random() < 0.8614:
-                        score1 += 1
-                        print(team1 + " " + choose_player(team1, "RB") + " " + str(generate_yards()) + " yard run. PAT GOOD " + str(score1) + "-" + str(score2))
-                    else:
-                        print(team1 + " " + choose_player(team1, "RB") + " " + str(generate_yards()) + " yard run. " + str(score1) + "-" + str(score2))
-                elif 80 < how_score < 97:  # Field Goal
-                    score1 += 3
-                    print(team1 + " FG GOOD " + str(score1) + "-" + str(score2))
-                else:  # Defensive score
-                    if random.randint(0, 100) < 67:  # Interception return
-                        score1 += 6
-                        if random.random() < 0.8614:
-                            score1 += 1
-                            print(team1 + " " + choose_player(team1, "Secondary") + " " + str(generate_yards()) + " yard interception return. PAT GOOD " + str(score1) + "-" + str(score2))
-                        else:
-                            print(team1 + " " + choose_player(team1, "Secondary") + " " + str(generate_yards()) + " yard interception return. " + str(score1) + "-" + str(score2))
-                    else:  # Fumble return
-                        score1 += 6
-                        if random.random() < 0.8614:
-                            score1 += 1
-                            print(team1 + " " + choose_player(team1, "Rush") + " " + str(generate_yards()) + " yard fumble return. PAT GOOD " + str(score1) + "-" + str(score2))
-                        else:
-                            print(team1 + " " + choose_player(team1, "Rush") + " " + str(generate_yards()) + " yard fumble return. " + str(score1) + "-" + str(score2))
-            else:  # team2 scores
-                if how_score < 43:
-                    score2 += 6
-                    if random.random() < 0.8614:
-                        score2 += 1
-                        print(team2 + " " + choose_player(team2, "WR") + " " + str(generate_yards()) + " yard pass from " + choose_player(team2, "QB") + ". PAT GOOD " + str(score1) + "-" + str(score2))
-                    else:
-                        print(team2 + " " + choose_player(team2, "WR") + " " + str(generate_yards()) + " yard pass from " + choose_player(team2, "QB") + ". " + str(score1) + "-" + str(score2))
-                elif 43 < how_score < 80:
-                    score2 += 6
-                    if random.random() < 0.8614:
-                        score2 += 1
-                        print(team2 + " " + choose_player(team2, "RB") + " " + str(generate_yards()) + " yard run. PAT GOOD " + str(score1) + "-" + str(score2))
-                    else:
-                        print(team2 + " " + choose_player(team2, "RB") + " " + str(generate_yards()) + " yard run. " + str(score1) + "-" + str(score2))
-                elif 80 < how_score < 97:
-                    score2 += 3
-                    print(team2 + " FG GOOD " + str(score1) + "-" + str(score2))
-                else:
-                    if random.randint(0, 100) < 67:
-                        score2 += 6
-                        if random.random() < 0.8614:
-                            score2 += 1
-                            print(team2 + " " + choose_player(team2, "Secondary") + " " + str(generate_yards()) + " yard interception return. PAT GOOD " + str(score1) + "-" + str(score2))
-                        else:
-                            print(team2 + " " + choose_player(team2, "Secondary") + " " + str(generate_yards()) + " yard interception return. " + str(score1) + "-" + str(score2))
-                    else:
-                        score2 += 6
-                        if random.random() < 0.8614:
-                            score2 += 1
-                            print(team2 + " " + choose_player(team2, "Rush") + " " + str(generate_yards()) + " yard fumble return. PAT GOOD " + str(score1) + "-" + str(score2))
-                        else:
-                            print(team2 + " " + choose_player(team2, "Rush") + " " + str(generate_yards()) + " yard fumble return. " + str(score1) + "-" + str(score2))
-    
-    print("FINAL: " + team1 + ":" + str(score1) + " - " + team2 + ":" + str(score2))
-    if(score1 > score2):
-        winner = team1
-    elif(score2>score1):
-        winner =  team2
+def attempt_pat():
+    if random.random()<0.95809:
+        return 1
     else:
-        winner = "Tie"
-    return {"home_score": score1, "away_score": score2, "winner": winner}
+        return 0
+    
+def generate_td_play(team, play_type):
+    if play_type == "pass":
+        return f"{team} {choose_player(team, 'WR')} {generate_yards()} yard pass from {choose_player(team, 'QB')}"
+    elif play_type == "run":
+        return f"{team} {choose_player(team, 'RB')} {generate_yards()} yard run"
+    elif play_type == "int":
+        return f"{team} {choose_player(team, 'Secondary')} {generate_yards()} yard interception return"
+    elif play_type == "fumble":
+        return f"{team} {choose_player(team, 'Rush')} {generate_yards()} yard fumble return"
+    
+def score_drive(team, how_score):
+    points = 0
+    if how_score < 43:  # Pass TD
+        points += 6
+        description = generate_td_play(team, "pass")
+    elif 43 < how_score < 80:  # Run TD
+        points += 6
+        description = generate_td_play(team, "run")
+    elif 80 < how_score < 97:  # FG
+        print(f"{team} FG GOOD")
+        return 3
+    else:  # Defensive TD
+        if random.randint(0, 100) < 67:
+            description = generate_td_play(team, "int")
+        else:
+            description = generate_td_play(team, "fumble")
+        points += 6
 
+    pat = attempt_pat()
+    points += pat
+    print(f"{description}.{' PAT GOOD' if pat else ''}")
+    return points
+
+def calculate_threshold(team1, team2):
+    return 50+0.75*(ratings(team1) - ratings(team2))
+
+def overtime(team1, team2, score1, score2):
+    threshold = calculate_threshold(team1, team2)
+
+    team1_ot_score = score_drive(team1, random.randint(0, 100))
+    score1 += team1_ot_score
+
+    if team1_ot_score < 6:
+        team2_ot_score = score_drive(team2, random.randint(0, 100))
+        score2 += team2_ot_score
+
+    ot_rounds = 0
+    while score1 == score2 and ot_rounds < 4:
+        ot_rounds += 1
+        if random.randint(1, 100) < threshold:
+            score1 += score_drive(team1, random.randint(0, 100))
+        else:
+            score2 += score_drive(team2, random.randint(0, 100))
+
+    return score1, score2
+
+def scoring(team1, team2):
+    score1 = score2 = 0
+    for q in range(4):
+        print(f"Quarter {q + 1}")
+        for _ in range(random.randint(4, 6)):
+            if random.randint(1, 100) < 47:
+                ratings_threshold = calculate_threshold(team1, team2)
+                how_score = random.randint(0, 100)
+
+                if random.randint(1,100) < ratings_threshold:
+                    score1 += score_drive(team1, how_score)
+                else:
+                    score2 += score_drive(team2, how_score)
+    if score1 == score2:
+        score1, score2 = overtime(team1, team2, score1, score2)
+
+    print(f"FINAL: {team1}:{score1} - {team2}:{score2}")
+    if score1 > score2:
+        return {"home_score": score1, "away_score": score2, "winner": team1}
+    elif score2 > score1:
+        return {"home_score": score1, "away_score": score2, "winner": team2}
+    else:
+        return {"home_score": score1, "away_score": score2, "winner": "Tie"}
