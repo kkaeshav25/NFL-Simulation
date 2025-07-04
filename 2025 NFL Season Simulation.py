@@ -29,4 +29,5 @@ def main(schedule_file, results_file):
         writer.writeheader()
         for r in results:
             writer.writerow(r)
-main("Week 1.csv", "Week 1 Results.csv")
+for i in range(1, 19):
+    main(f"Week {i}.csv", f"Week {i} Results.csv")
