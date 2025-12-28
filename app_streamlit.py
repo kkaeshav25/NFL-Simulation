@@ -17,7 +17,7 @@ def get_team_list():
 
 st.set_page_config(page_title="NFL Simulator", layout="wide")
 
-st.title("NFL Simulation — Streamlit Prototype")
+st.title("NFL Simulation")
 
 with st.sidebar:
     st.header("Simulation Settings")
